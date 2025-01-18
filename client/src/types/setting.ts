@@ -3,6 +3,7 @@ interface Settings {
     language: string
     fontSize: number
     fontFamily: string
+    
 }
 
 interface SettingsContext extends Settings {

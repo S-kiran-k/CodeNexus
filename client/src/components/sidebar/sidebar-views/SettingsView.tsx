@@ -16,7 +16,6 @@ function SettingsView() {
         setFontSize,
         fontFamily,
         setFontFamily,
-       
         resetSettings,
     } = useSettings()
     const { viewHeight } = useResponsive()
@@ -29,7 +28,7 @@ function SettingsView() {
         setLanguage(e.target.value)
     const handleFontSizeChange = (e: ChangeEvent<HTMLSelectElement>) =>
         setFontSize(parseInt(e.target.value))
-   
+
 
     useEffect(() => {
         // Set editor font family
@@ -85,6 +84,7 @@ function SettingsView() {
                 options={langNames}
                 title="Language"
             />
+            {/* Show GitHub corner option */}
             <button
                 className="mt-auto w-full rounded-md border-none bg-darkHover px-4 py-2 text-white outline-none"
                 onClick={resetSettings}

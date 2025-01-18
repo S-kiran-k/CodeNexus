@@ -5,7 +5,7 @@ interface WindowDimensions {
     height: number
 }
 
-function    useWindowDimensions() {
+function useWindowDimensions() {
     const [windowDimensions, setWindowDimensions] = useState<WindowDimensions>({
         width: window.innerWidth,
         height: window.innerHeight,

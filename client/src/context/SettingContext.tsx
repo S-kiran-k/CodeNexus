@@ -28,7 +28,6 @@ const defaultSettings: Settings = {
     language: "Javascript",
     fontSize: 16,
     fontFamily: "Space Mono",
-   
 }
 
 function SettingContextProvider({ children }: { children: ReactNode }) {
@@ -58,7 +57,6 @@ function SettingContextProvider({ children }: { children: ReactNode }) {
     const [language, setLanguage] = useState<string>(storedLanguage)
     const [fontSize, setFontSize] = useState<number>(storedFontSize)
     const [fontFamily, setFontFamily] = useState<string>(storedFontFamily)
-   
 
     const resetSettings = () => {
         setTheme(defaultSettings.theme)
@@ -75,6 +73,7 @@ function SettingContextProvider({ children }: { children: ReactNode }) {
             language,
             fontSize,
             fontFamily,
+           
         }
         localStorage.setItem("settings", JSON.stringify(updatedSettings))
     }, [theme, language, fontSize, fontFamily])
