@@ -4,13 +4,11 @@ import { useFileSystem } from "@/context/FileContext"
 import useResponsive from "@/hooks/useResponsive"
 import { FileSystemItem } from "@/types/file"
 import cn from "classnames"
-import { BiArchiveIn } from "react-icons/bi"
-import { TbFileUpload } from "react-icons/tb"
 import { v4 as uuidV4 } from "uuid"
 import { toast } from "react-hot-toast"
 import Loader from "../../../styles/Loading/Loading"
 import Input from "@/styles/OpenFolder/OpenFolder"
-import Download from "../../../styles/Download/Download"
+import Download from "../../../styles/Downloads/Downloads"
 function FilesView() {
     const { downloadFilesAndFolders, updateDirectory } = useFileSystem()
     const { viewHeight } = useResponsive()
