@@ -1,7 +1,6 @@
-import React from "react"
 import styled from "styled-components"
 
-const Button = ({ text }) => {
+const Button = () => {
     // Accepting the 'text' prop
     return (
         <StyledWrapper>
@@ -87,8 +86,8 @@ const Button = ({ text }) => {
                         </defs>
                     </svg>
                 </span>
-                <p className="text">{text}</p>{" "}
-                {/* Displaying the dynamic text */}
+                <p className="text">Open Files</p>{" "}
+               
             </button>
         </StyledWrapper>
     )
