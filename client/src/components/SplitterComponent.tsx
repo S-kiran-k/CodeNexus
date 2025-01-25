@@ -1,67 +1,67 @@
 import { useViews } from "@/context/ViewContext"
 import useLocalStorage from "@/hooks/useLocalStorage"
 import useWindowDimensions from "@/hooks/useWindowDimensions"
-import { ReactNode } from "react"
-import Split from "react-split"
+import { ReactNode, useEffect, useRef } from "react"
+import Split from "split.js"
 
 function SplitterComponent({ children }: { children: ReactNode }) {
     const { isSidebarOpen } = useViews()
     const { isMobile, width } = useWindowDimensions()
     const { setItem, getItem } = useLocalStorage()
 
-    const getGutter = () => {
+    const splitInstanceRef = useRef<Split.Instance | null>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (!width || !containerRef.current) return // Wait for container and width
+
+        // Default sizes
+        const savedSizes = getItem("editorSizes")
+        const defaultSizes = isSidebarOpen
+            ? JSON.parse(savedSizes || "[35,65]")
+            : [0, width]
+
+        splitInstanceRef.current = Split(
+            containerRef.current?.children as HTMLCollectionOf<HTMLElement>,
+            {
+                sizes: defaultSizes,
+                minSize: isSidebarOpen ? [350, 350] : [0, 0],
+                gutterSize: 7,
+                snapOffset: 30,
+                direction: "horizontal",
+                cursor: "ew-resize",
+                gutter: createGutter,
+                onDragEnd: (sizes: number[]) => {
+                    setItem("editorSizes", JSON.stringify(sizes))
+                },
+            },
+        )
+
+        return () => {
+            splitInstanceRef.current?.destroy()
+        }
+    }, [width, isSidebarOpen])
+
+    const createGutter = () => {
         const gutter = document.createElement("div")
-        gutter.className = "h-full cursor-e-resizer hidden md:block"
-        gutter.style.backgroundColor = "#e1e1ffb3"
+        gutter.className =
+            "flex w-[7px] cursor-ew-resize items-center justify-center bg-grey-500 hover:bg-grey-700"
+        const innerDiv = document.createElement("div")
+        innerDiv.className = "h-10 w-[2px] rounded-full bg-white"
+        gutter.appendChild(innerDiv)
         return gutter
     }
 
-    const getSizes = () => {
-        if (isMobile) return [0, width]
-        const savedSizes = getItem("editorSizes")
-        let sizes = [35, 65]
-        if (savedSizes) {
-            sizes = JSON.parse(savedSizes)
-        }
-        return isSidebarOpen ? sizes : [0, width]
-    }
-
-    const getMinSizes = () => {
-        if (isMobile) return [0, width]
-        return isSidebarOpen ? [350, 350] : [50, 0]
-    }
-
-    const getMaxSizes = () => {
-        if (isMobile) return [0, Infinity]
-        return isSidebarOpen ? [Infinity, Infinity] : [0, Infinity]
-    }
-
-    const handleGutterDrag = (sizes: number[]) => {
-        setItem("editorSizes", JSON.stringify(sizes))
-    }
-
-    const getGutterStyle = () => ({
-        width: "7px",
-        display: isSidebarOpen && !isMobile ? "block" : "none",
-    })
+    if (!width) return null // Avoid rendering until dimensions are available
 
     return (
-        <Split
-            sizes={getSizes()}
-            minSize={getMinSizes()}
-            gutter={getGutter}
-            maxSize={getMaxSizes()}
-            dragInterval={1}
-            direction="horizontal"
-            gutterAlign="center"
-            cursor="e-resize"
-            snapOffset={30}
-            gutterStyle={getGutterStyle}
-            onDrag={handleGutterDrag}
-            className="flex h-screen min-h-screen max-w-full items-center justify-center overflow-hidden"
+        <div
+            ref={containerRef}
+            className="flex h-screen overflow-hidden"
+            style={{ display: isSidebarOpen ? "flex" : "none" }}
         >
             {children}
-        </Split>
+        </div>
     )
 }
 

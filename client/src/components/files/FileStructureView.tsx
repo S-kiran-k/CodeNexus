@@ -27,7 +27,7 @@ function FileStructureView() {
     const explorerRef = useRef<HTMLDivElement | null>(null)
     const [selectedDirId, setSelectedDirId] = useState<Id | null>(null)
     const { minHeightReached } = useResponsive()
-
+    //const [fileNameInput,setFileNameInput] = useState();
     const handleClickOutside = (e: MouseEvent) => {
         if (
             explorerRef.current &&
@@ -36,7 +36,6 @@ function FileStructureView() {
             setSelectedDirId(fileStructure.id)
         }
     }
-
     const handleCreateFile = () => {
         const fileName = prompt("Enter file name")
         if (fileName) {
@@ -83,6 +82,12 @@ function FileStructureView() {
                     </button>
                 </div>
             </div>
+            {/* for input feild
+            <div className="bg-green-400 px-5 py-5 justify-center items-center">
+                <div className="">
+                    <input type="text" className="text-blue-500"></input>
+                </div>
+            </div> */}
             <div
                 className={cn(
                     "min-h-[200px] flex-grow overflow-auto pr-2 sm:min-h-0",
