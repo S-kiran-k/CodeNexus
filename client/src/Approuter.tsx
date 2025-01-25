@@ -2,7 +2,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import EditorPage from "./pages/EditorPage"
 import HomePage from "./pages/HomePage"
-import { Toaster } from "react-hot-toast"
 
 
 const Approuter = createBrowserRouter(
@@ -15,8 +14,7 @@ const Approuter = createBrowserRouter(
             path: "/editor/:roomId",
             element: <EditorPage />,
         },
-    ],
-    <Toaster position="top-right" />,
+    ]
 );
 
 

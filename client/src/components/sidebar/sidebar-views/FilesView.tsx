@@ -8,7 +8,9 @@ import { BiArchiveIn } from "react-icons/bi"
 import { TbFileUpload } from "react-icons/tb"
 import { v4 as uuidV4 } from "uuid"
 import { toast } from "react-hot-toast"
-
+import Loader from "../../../styles/Loading/Loading"
+import Input from "@/styles/OpenFolder/OpenFolder"
+import Download from "../../../styles/Download/Download"
 function FilesView() {
     const { downloadFilesAndFolders, updateDirectory } = useFileSystem()
     const { viewHeight } = useResponsive()
@@ -186,18 +188,24 @@ function FilesView() {
             >
                 <hr />
                 <button
-                    className="mt-2 flex w-full justify-start rounded-md p-2 transition-all hover:bg-darkHover"
+                    className="mt-2 flex  justify-start rounded-md p-2"
                     onClick={handleOpenDirectory}
                     disabled={isLoading}
                 >
-                    <TbFileUpload className="mr-2" size={24} />
-                    {isLoading ? "Loading..." : "Open File/Folder"}
+                    {isLoading ? <Loader/> :
+                    <div className="">
+                         <Input text="Open Files"/>
+                    </div>
+                    
+                    
+                    
+                   }
                 </button>
                 <button
-                    className="flex w-full justify-start rounded-md p-2 transition-all hover:bg-darkHover"
+                    className="flex w-full justify-start rounded-md p-2 "
                     onClick={downloadFilesAndFolders}
                 >
-                    <BiArchiveIn className="mr-2" size={22} /> Download Code
+                    <Download/>
                 </button>
             </div>
         </div>

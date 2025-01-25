@@ -6,59 +6,71 @@ import Split from "split.js"
 
 function SplitterComponent({ children }: { children: ReactNode }) {
     const { isSidebarOpen } = useViews()
-    const { isMobile, width } = useWindowDimensions()
+    const { width } = useWindowDimensions() // Removed isMobile since it was unused
     const { setItem, getItem } = useLocalStorage()
 
     const splitInstanceRef = useRef<Split.Instance | null>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        if (!width || !containerRef.current) return // Wait for container and width
+        if (!containerRef.current) {
+            console.error("ContainerRef is not set")
+            return
+        }
 
-        // Default sizes
+        if (!width) {
+            console.error("Width is undefined")
+            return
+        }
+
+        // Get saved sizes or set to default sizes
         const savedSizes = getItem("editorSizes")
         const defaultSizes = isSidebarOpen
-            ? JSON.parse(savedSizes || "[35,65]")
-            : [0, width]
+            ? JSON.parse(savedSizes || "[35,65]") // Default: 35% and 65%
+            : [3, 25] // When sidebar is closed: 100% width for main pane
 
+        // Initialize Split.js
         splitInstanceRef.current = Split(
-            containerRef.current?.children as HTMLCollectionOf<HTMLElement>,
+            Array.from(containerRef.current?.children || []) as HTMLElement[],
             {
                 sizes: defaultSizes,
-                minSize: isSidebarOpen ? [350, 350] : [0, 0],
+                minSize: isSidebarOpen ? [350, 350] : [0, 0], // Sidebar constraints
                 gutterSize: 7,
                 snapOffset: 30,
                 direction: "horizontal",
                 cursor: "ew-resize",
-                gutter: createGutter,
+                gutter: createGutter, // Use custom gutter element
                 onDragEnd: (sizes: number[]) => {
-                    setItem("editorSizes", JSON.stringify(sizes))
+                    setItem("editorSizes", JSON.stringify(sizes)) // Save sizes on drag
                 },
             },
         )
 
         return () => {
-            splitInstanceRef.current?.destroy()
+            splitInstanceRef.current?.destroy() // Cleanup Split instance
         }
-    }, [width, isSidebarOpen])
+    }, [isSidebarOpen, width])
 
+    // Custom gutter creator
     const createGutter = () => {
         const gutter = document.createElement("div")
         gutter.className =
-            "flex w-[7px] cursor-ew-resize items-center justify-center bg-grey-500 hover:bg-grey-700"
+            "flex w-[7px] cursor-ew-resize items-center justify-center bg-gray-500 hover:bg-gray-700"
         const innerDiv = document.createElement("div")
         innerDiv.className = "h-10 w-[2px] rounded-full bg-white"
         gutter.appendChild(innerDiv)
         return gutter
     }
 
-    if (!width) return null // Avoid rendering until dimensions are available
+    // Avoid rendering until dimensions are available
+    if (!width) return null
 
     return (
         <div
             ref={containerRef}
-            className="flex h-screen overflow-hidden"
-            style={{ display: isSidebarOpen ? "flex" : "none" }}
+            className={`flex h-screen overflow-hidden ${
+                isSidebarOpen ? "sidebar-open" : "sidebar-closed"
+            }`}
         >
             {children}
         </div>

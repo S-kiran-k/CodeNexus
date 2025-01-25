@@ -27,7 +27,52 @@ function FileStructureView() {
     const explorerRef = useRef<HTMLDivElement | null>(null)
     const [selectedDirId, setSelectedDirId] = useState<Id | null>(null)
     const { minHeightReached } = useResponsive()
-    //const [fileNameInput,setFileNameInput] = useState();
+    const [fileNameInput, setFileNameInput] = useState<string>("") // Store the file name entered in input
+    const [isInputVisible, setIsInputVisible] = useState<boolean>(false) // Control input visibility
+    const [isDirectoryInputVisible, setIsDirectoryInputVisible] =
+        useState<boolean>(false) // Control directory input visibility
+
+    // Input handlers for both file and directory
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFileNameInput(e.target.value) // Update input value
+    }
+
+    const handleCreateFile = () => {
+        setIsInputVisible(true) // Show file input field
+    }
+
+    const handleCreateDirectory = () => {
+        setIsDirectoryInputVisible(true) // Show directory input field
+    }
+
+    const handleCancel = () => {
+        setIsInputVisible(false)
+        setFileNameInput("") // Clear input if canceled
+    }
+
+    const handleCancelDirectory = () => {
+        setIsDirectoryInputVisible(false)
+        setFileNameInput("") // Clear directory input if canceled
+    }
+
+    const handleSubmitFileName = () => {
+        if (fileNameInput) {
+            const parentDirId = selectedDirId || fileStructure.id // Select parent directory
+            createFile(parentDirId, fileNameInput) // Create the file
+            setIsInputVisible(false) // Hide input after creation
+            setFileNameInput("") // Reset input field
+        }
+    }
+
+    const handleSubmitFileNameDir = () => {
+        if (fileNameInput) {
+            const parentDirId = selectedDirId || fileStructure.id // Select parent directory
+            createDirectory(parentDirId, fileNameInput) // Create directory
+            setIsDirectoryInputVisible(false) // Hide input after creation
+            setFileNameInput("") // Reset input field
+        }
+    }
+
     const handleClickOutside = (e: MouseEvent) => {
         if (
             explorerRef.current &&
@@ -36,27 +81,12 @@ function FileStructureView() {
             setSelectedDirId(fileStructure.id)
         }
     }
-    const handleCreateFile = () => {
-        const fileName = prompt("Enter file name")
-        if (fileName) {
-            const parentDirId: Id = selectedDirId || fileStructure.id
-            createFile(parentDirId, fileName)
-        }
-    }
-
-    const handleCreateDirectory = () => {
-        const dirName = prompt("Enter directory name")
-        if (dirName) {
-            const parentDirId: Id = selectedDirId || fileStructure.id
-            createDirectory(parentDirId, dirName)
-        }
-    }
 
     const sortedFileStructure = sortFileSystemItem(fileStructure)
 
     return (
         <div onClick={handleClickOutside} className="flex flex-grow flex-col">
-            <div className="view-title flex justify-between">
+            <div className="flex justify-between">
                 <h2>Files</h2>
                 <div className="flex gap-2">
                     <button
@@ -73,6 +103,7 @@ function FileStructureView() {
                     >
                         <RiFolderAddLine size={20} />
                     </button>
+
                     <button
                         className="rounded-md px-1 hover:bg-darkHover"
                         onClick={collapseDirectories}
@@ -82,12 +113,58 @@ function FileStructureView() {
                     </button>
                 </div>
             </div>
-            {/* for input feild
-            <div className="bg-green-400 px-5 py-5 justify-center items-center">
-                <div className="">
-                    <input type="text" className="text-blue-500"></input>
+            <hr className="mt-2 mb-2"/>
+            {/* Input fields for File and Directory creation */}
+
+            {(isInputVisible || isDirectoryInputVisible) && (
+                <div className="flex justify-center items-center">
+                    <div className="py-2">
+                        <input
+                            type="text"
+                            className="w-max rounded-md px-1 py-3 text-blue-500"
+                            value={fileNameInput}
+                            onChange={handleInputChange}
+                            placeholder={
+                                isInputVisible
+                                    ? "Enter file name"
+                                    : "Enter directory name"
+                            }
+                        />
+                        <div className="flex justify-center py-3">
+                            {/* Confirm Button */}
+                            <button
+                                className="group relative m-1 cursor-pointer overflow-hidden rounded-md border-2 border-[#282A36] px-3.5 py-2 font-medium text-white"
+                                onClick={
+                                    isInputVisible
+                                        ? handleSubmitFileName
+                                        : handleSubmitFileNameDir
+                                }
+                            >
+                                <span className="ease absolute top-1/2 h-0 w-64 origin-center -translate-x-20 rotate-45 bg-[#282A36] transition-all duration-300 group-hover:h-64 group-hover:-translate-y-32"></span>
+                                <span className="ease relative text-white transition duration-300 group-hover:text-white">
+                                    Create
+                                </span>
+                            </button>
+                            {/* Cancel Button */}
+                            <button
+                                className="group relative m-1 cursor-pointer overflow-hidden rounded-md border-2 border-[#282A36] px-3.5 py-2 font-medium text-[#282A36]"
+                                onClick={
+                                    isInputVisible
+                                        ? handleCancel
+                                        : handleCancelDirectory
+                                }
+                            >
+                                <span className="ease absolute top-1/2 h-0 w-64 origin-center -translate-x-20 rotate-45 bg-[#282A36] transition-all duration-300 group-hover:h-64 group-hover:-translate-y-32"></span>
+                                <span className="ease relative text-red-600 transition duration-300 group-hover:text-white">
+                                    Cancel
+                                </span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div> */}
+            )}
+
+            {/* Render file structure */}
             <div
                 className={cn(
                     "min-h-[200px] flex-grow overflow-auto pr-2 sm:min-h-0",
@@ -98,14 +175,13 @@ function FileStructureView() {
                 )}
                 ref={explorerRef}
             >
-                {sortedFileStructure.children &&
-                    sortedFileStructure.children.map((item) => (
-                        <Directory
-                            key={item.id}
-                            item={item}
-                            setSelectedDirId={setSelectedDirId}
-                        />
-                    ))}
+                {sortedFileStructure.children?.map((item) => (
+                    <Directory
+                        key={item.id}
+                        item={item}
+                        setSelectedDirId={setSelectedDirId}
+                    />
+                ))}
             </div>
         </div>
     )
