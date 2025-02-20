@@ -104,7 +104,7 @@ focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     type="text"
                     name="username"
                     placeholder="Username"
-                    className="w-64 w-full rounded-md border-2 bg-black p-2 px-3 py-3 text-white 
+                    className=" w-full rounded-md border-2 bg-black p-2 px-3 py-3 text-white 
 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     onChange={handleInputChanges}
                     value={currentUser.username}

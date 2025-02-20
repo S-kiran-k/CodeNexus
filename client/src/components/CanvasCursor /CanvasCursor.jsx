@@ -1,5 +1,5 @@
 
-import useCanvasCursor from "../../hooks/useCanvasCursor.tsx"
+import useCanvasCursor from '../../hooks/useCanvasCursor';
 
 const CanvasCursor = () => {
     useCanvasCursor(); // Activate the cursor effect globally
