@@ -2,9 +2,11 @@ import ChatsView from "@/components/sidebar/sidebar-views/ChatsView"
 import FilesView from "@/components/sidebar/sidebar-views/FilesView"
 import RunView from "@/components/sidebar/sidebar-views/RunView"
 import SettingsView from "@/components/sidebar/sidebar-views/SettingsView"
+import TerminalView from "@/components/sidebar/sidebar-views/TerminalView"
 import UsersView from "@/components/sidebar/sidebar-views/UsersView"
 import useWindowDimensions from "@/hooks/useWindowDimensions"
 import { VIEWS, ViewContext as ViewContextType } from "@/types/view"
+import { SquareTerminal } from "lucide-react"
 import { ReactNode, createContext, useContext, useState } from "react"
 import { IoSettingsOutline } from "react-icons/io5"
 import { LuFiles } from "react-icons/lu"
@@ -24,12 +26,16 @@ function ViewContextProvider({ children }: { children: ReactNode }) {
     const { isMobile } = useWindowDimensions()
     const [activeView, setActiveView] = useState<VIEWS>(VIEWS.FILES)
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(!isMobile)
+
+
     const [viewComponents] = useState({
         [VIEWS.FILES]: <FilesView />,
         [VIEWS.CLIENTS]: <UsersView />,
         [VIEWS.SETTINGS]: <SettingsView />,
         [VIEWS.CHATS]: <ChatsView />,
         [VIEWS.RUN]: <RunView />,
+        [VIEWS.TERMINAL]:  <TerminalView/>
+        ,
     })
     const [viewIcons] = useState({
         [VIEWS.FILES]: <LuFiles size={28} />,
@@ -37,6 +43,7 @@ function ViewContextProvider({ children }: { children: ReactNode }) {
         [VIEWS.SETTINGS]: <IoSettingsOutline size={28} />,
         [VIEWS.CHATS]: <PiChats size={30} />,
         [VIEWS.RUN]: <PiPlay size={28} />,
+        [VIEWS.TERMINAL]: <SquareTerminal />,
     })
 
     return (
@@ -48,6 +55,7 @@ function ViewContextProvider({ children }: { children: ReactNode }) {
                 setIsSidebarOpen,
                 viewComponents,
                 viewIcons,
+        
             }}
         >
             {children}

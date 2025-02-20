@@ -5,12 +5,13 @@ import cors from "cors"
 import { SocketEvent, SocketId } from "./types/socket"
 import { USER_CONNECTION_STATUS, User } from "./types/user"
 import { Server } from "socket.io"
+// import { WebSocketServer, WebSocket } from "ws";
+import {spawn} from "node-pty";
 import path from "path"
 
 dotenv.config()
 
 const app = express()
-
 app.use(express.json())
 
 app.use(cors())
@@ -57,6 +58,28 @@ function getUserBySocketId(socketId: SocketId): User | null {
 }
 
 io.on("connection", (socket) => {
+	// Example: Retrieve uploaded directory dynamically (You need to implement this)
+
+	// Start a new PTY process (bash shell) in the user's uploaded directory
+	const ptyProcess = spawn("bash", [], {
+		name: "xterm-color",
+		env: process.env,
+	});
+
+	ptyProcess.onData((data) => {
+		socket.emit("terminal-output", data);
+	});
+
+	socket.on("terminal-input", (input) => {
+		ptyProcess.write(input);
+	});
+
+	socket.on("disconnect", () => {
+		console.log("Socket.io Disconnected");
+		ptyProcess.kill(); 
+	});
+
+	
 	// Handle user actions
 	socket.on(SocketEvent.JOIN_REQUEST, ({ roomId, username }) => {
 		// Check is username exist in the room
@@ -260,6 +283,7 @@ io.on("connection", (socket) => {
 		})
 	})
 })
+
 
 const PORT = process.env.PORT || 3000
 

@@ -26,6 +26,8 @@ enum SocketEvent {
 	REQUEST_DRAWING = "request-drawing",
 	SYNC_DRAWING = "sync-drawing",
 	DRAWING_UPDATE = "drawing-update",
+	TERMINAL_INPUT = "terminal-input",
+	TERMINAL_OUTPUT = "terminal-output"
 }
 
 interface SocketContext {

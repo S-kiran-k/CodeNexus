@@ -36,7 +36,7 @@ function ChatInput() {
     return (
         <form
             onSubmit={handleSendMessage}
-            className="flex justify-between rounded-md border border-primary"
+            className="flex justify-between rounded-md border "
         >
             <input
                 type="text"
@@ -45,7 +45,7 @@ function ChatInput() {
                 ref={inputRef}
             />
             <button
-                className="flex items-center justify-center rounded-r-md  bg-primary p-2 text-black"
+                className="flex items-center justify-center rounded-r-md   p-2 text-black"
                 type="submit"
             >
                 <LuSendHorizonal size={24} />

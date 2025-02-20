@@ -35,7 +35,7 @@ function ChatList() {
 
     return (
         <div
-            className="flex-grow overflow-auto rounded-md bg-darkHover p-2"
+            className="flex-grow overflow-auto rounded-md  p-2"
             ref={messagesContainerRef}
             onScroll={handleScroll}
         >
