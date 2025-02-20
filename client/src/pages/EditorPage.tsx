@@ -1,4 +1,3 @@
-import CanvasCursor from "@/components/CanvasCursor /CanvasCursor"
 import SplitterComponent from "@/components/SplitterComponent"
 import ConnectionStatusPage from "@/components/connection/ConnectionStatusPage"
 import Sidebar from "@/components/sidebar/Sidebar"
