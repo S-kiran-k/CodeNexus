@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { MotionValue, motion, useScroll, useTransform } from "framer-motion"
 import { cn } from "@/lib/utils"
 import {
@@ -129,8 +129,7 @@ export const Lid = ({
     scaleX,
     scaleY,
     rotate,
-    translate,
-    src,
+    translate
 }: {
     scaleX: MotionValue<number>
     scaleY: MotionValue<number>

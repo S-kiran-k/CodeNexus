@@ -33,18 +33,18 @@ export const SmoothScrollEffect = () => {
             ref={sectionRef}
             style={
                 {
-                    opacity: fadeIn,
-                    "--scale-effect": scaleEffect as any, // ✅ TypeScript fix for CSS variables
-                    "--fade-border": fadeBorder as any, // ✅ TypeScript fix for CSS variables
+                    opacity: fadeIn as unknown as number, // Fix opacity issue
+                    "--scale-effect": scaleEffect as unknown as string, // Fix CSS variable issue
+                    "--fade-border": fadeBorder as unknown as string, // Fix CSS variable issue
                 } as React.CSSProperties
-            } // ✅ Ensuring correct type
+            }
             className="relative mt-[50vh] flex h-[450vh] items-center justify-center"
         >
             <div className="sticky left-1/2 top-1/2 min-h-[48rem] min-w-[48rem] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap before:absolute before:inset-0 before:scale-[var(--scale-effect)] before:border-[2rem] before:border-[#F4B400] before:opacity-[var(--fade-border)]">
                 <motion.p
                     aria-hidden
                     style={{ x: textMoveX, y: "-50%" }}
-                    className="whitepspace-nowrap min-w-screen absolute top-1/2 left-[calc(-50vw+25rem)] text-[23rem] text-heading"
+                    className="whitepspace-nowrap min-w-screen text-heading absolute left-[calc(-50vw+25rem)] top-1/2 text-[23rem]"
                 >
                     Dynamic Coding Experience
                 </motion.p>

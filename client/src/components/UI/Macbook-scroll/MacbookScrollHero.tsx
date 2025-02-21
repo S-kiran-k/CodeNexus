@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { MacbookScroll } from "./MacbookScroll"
 import { motion, useAnimation, useInView } from "framer-motion"
 
