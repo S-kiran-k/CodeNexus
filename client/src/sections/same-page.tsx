@@ -237,10 +237,8 @@ export const SamePage = () => {
                       "--scale": endTextScale,
                       position,
                   })}
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="absolute inset-0 flex items-center justify-center text-center"
+                 
+                  className="absolute inset-0 flex items-center justify-center pt-40 text-center"
               >
                   <p className="text-6xl font-extrabold text-white">
                       Let's check out the{" "}
