@@ -10,7 +10,7 @@ const animationOrder = {
     showParagraphTwoStart: 0.35,
     showParagraphTwoEnd: 0.4,
     hideParagraphTwo: 0.5,
-    showParagraphThreeStart: 0.60,
+    showParagraphThreeStart: 0.6,
     showParagraphThreeEnd: 0.65,
     hideParagraphThree: 0.75,
     showLoadingScreenStart: 0.53,
@@ -21,6 +21,8 @@ const animationOrder = {
     createBranchFadeInEnd: 0.85,
     endTextFadeInStart: 0.95,
     endTextFadeInEnd: 1,
+    endTextFadeInStart2: 0.95,
+    endTextFadeInEnd2: 1,
 }
 
 export const SamePage = () => {
@@ -148,7 +150,21 @@ export const SamePage = () => {
     )
 
 
-
+  const endTextOpacity = useTransform(
+      scrollYProgress,
+      [animationOrder.endTextFadeInStart2, animationOrder.endTextFadeInEnd2],
+      [0, 1],
+  )
+  const endTextScale = useTransform(
+      scrollYProgress,
+      [animationOrder.endTextFadeInStart2, animationOrder.endTextFadeInEnd2],
+      [0.8, 1],
+  )
+  const endTextTranslateY = useTransform(
+      scrollYProgress,
+      [animationOrder.endTextFadeInStart2, animationOrder.endTextFadeInEnd2],
+      ["4rem", "0rem"],
+  )
 
   const position = useTransform(scrollYProgress, (pos) =>
     pos >= 1 ? "relative" : "fixed"
@@ -179,9 +195,11 @@ export const SamePage = () => {
                   })}
                   className="translate-y-centered-offset left-[20px] top-1/2 w-[300px] pl-16 text-2xl leading-tight text-white"
               >
-                  Not only share code,
+                  Collaborate in real-time.
                   <br />
-                  <span className="text-primary">share the context.</span>
+                  <span className="text-white">
+                      Share code, share insights, build together.
+                  </span>
               </motion.p>
               <motion.p
                   style={stylesWithCssVar({
@@ -191,10 +209,10 @@ export const SamePage = () => {
                   })}
                   className="translate-y-centered-offset right-[20px] top-1/2 w-[300px] pr-16 text-xl leading-tight text-white"
               >
-                  Sometimes it's not about code.
+                  Great ideas go beyond code.
                   <br />
-                  <span className="text-primary">
-                      Get everybody on the same page. Literally.
+                  <span className="text-white">
+                      Align your team with real-time collaboration.
                   </span>
               </motion.p>
               <motion.p
@@ -203,14 +221,32 @@ export const SamePage = () => {
                       "--y": paragraph3TranslateY,
                       position,
                   })}
-                  className="translate-y-centered-offset right-[20px] top-1/2 w-[300px] pr-16 text-xl leading-tight bg-red-500 text-white"
+                  className="translate-y-centered-offset right-[20px] top-1/2 w-[300px] pr-16 text-xl leading-tight text-white"
               >
-                  para3
+                  Debug faster, build smarter,
                   <br />
-                  <span className="text-primary bg-red-600">
-                      Get everybody on the same page. Literally.
+                  <span className="text-white">
+                      and stay in sync—effortlessly.
                   </span>
               </motion.p>
+
+              <motion.div
+                  style={stylesWithCssVar({
+                      opacity: endTextOpacity,
+                      "--y": endTextTranslateY,
+                      "--scale": endTextScale,
+                      position,
+                  })}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="absolute inset-0 flex items-center justify-center text-center"
+              >
+                  <p className="text-6xl font-extrabold text-white">
+                      Let's check out the{" "}
+                      <span className="text-gray-500">amazing features!</span>
+                  </p>
+              </motion.div>
           </div>
       </section>
   )

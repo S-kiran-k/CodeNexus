@@ -5,7 +5,8 @@ import { SamePage } from "@/sections/same-page";
 import "./Home.css"
 import { SparklesPreview } from "@/components/UI/Sparkles/SparklesPreview"
 import { MacbookScrollHero } from '../components/UI/Macbook-scroll/MacbookScrollHero';
-import HomePage from "@/components/Home/Home";
+import Features from "@/components/Features/Features";
+// import HomePage from "@/components/Home/Home";
 export default function Home() {
   return (
       <>
@@ -16,7 +17,8 @@ export default function Home() {
                   <MacbookScrollHero />
                   <Collaboration />
                   <SamePage />
-                  <HomePage/>
+                  <Features/>
+                  {/* <HomePage/> */}
                   {/*<SmoothScrollEffect /> */}
               </div>
           </main>
