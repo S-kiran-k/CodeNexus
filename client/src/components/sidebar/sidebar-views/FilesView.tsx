@@ -186,26 +186,23 @@ function FilesView() {
                 })}
             >
                 <hr />
-                <button
-                    className="mt-2 flex  justify-start rounded-md p-2"
-                    onClick={handleOpenDirectory}
-                    disabled={isLoading}
-                >
-                    {isLoading ? <Loader/> :
-                    <div className="">
-                         <Input/>
-                    </div>
-                    
-                    
-                    
-                   }
-                </button>
-                <button
-                    className="flex w-full justify-start rounded-md p-2 "
-                    onClick={downloadFilesAndFolders}
-                >
-                    <Download/>
-                </button>
+                <div className="flex w-full items-center gap-2">
+                    {" "}
+                    {/* Flex container for row layout */}
+                    <button
+                        className="flex flex-1 justify-start rounded-md p-2"
+                        onClick={handleOpenDirectory}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? <Loader /> : <Input />}
+                    </button>
+                    <button
+                        className="flex flex-1 justify-start rounded-md p-2"
+                        onClick={downloadFilesAndFolders}
+                    >
+                        <Download />
+                    </button>
+                </div>
             </div>
         </div>
     )

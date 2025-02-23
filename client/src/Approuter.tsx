@@ -27,7 +27,7 @@ const Approuter = createBrowserRouter([
         element: (
             <>
                 <EditorPage />
-                <CanvasCursor />
+                {/* <CanvasCursor /> */}
             </>
         ),
     },

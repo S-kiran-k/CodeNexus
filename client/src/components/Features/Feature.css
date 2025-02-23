@@ -1,0 +1,45 @@
+.custom-cursor {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border-radius: 50%;
+    pointer-events: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    transform: translate(-50%, -50%);
+}
+
+.hovering .custom-cursor {
+    background-color: cyan; /* Change this to any color */
+    transform: scale(10);
+}
+
+.bento-item {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.bento-item:hover {
+    transform: scale(1.05);
+}
+
+.bento-item::before {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 250%;
+    height: 250%;
+    background: radial-gradient(circle, rgba(255, 0, 182, 0.3), rgba(255, 255, 255, 0));
+    transform: rotate(30deg);
+    transition: all 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.bento-item:hover::before {
+    top: 0%;
+    left: 0%;
+    opacity: 1;
+    transition: all 0.5s ease-in-out;
+}

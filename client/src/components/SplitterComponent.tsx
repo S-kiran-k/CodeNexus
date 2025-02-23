@@ -11,7 +11,6 @@ function SplitterComponent({ children }: { children: ReactNode }) {
 
     const splitInstanceRef = useRef<Split.Instance | null>(null)
     const containerRef = useRef<HTMLDivElement>(null)
-
     useEffect(() => {
         if (!containerRef.current) {
             console.error("ContainerRef is not set")
@@ -25,9 +24,11 @@ function SplitterComponent({ children }: { children: ReactNode }) {
 
         // Get saved sizes or set to default sizes
         const savedSizes = getItem("editorSizes")
+        const isMobile = width < 768 // Define mobile breakpoint
+
         const defaultSizes = isSidebarOpen
-            ? JSON.parse(savedSizes || "[35,65]") // Default: 35% and 65%
-            : [3, 25] // When sidebar is closed: 100% width for main pane
+            ? JSON.parse(savedSizes || "[35,65]") // Default: 35% sidebar, 65% editor
+            : [isMobile ? -1 : 3, 100] // 0 when mobile, 3 when desktop
 
         // Initialize Split.js
         splitInstanceRef.current = Split(

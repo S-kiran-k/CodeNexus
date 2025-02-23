@@ -153,9 +153,7 @@ export const Lid = ({
                         boxShadow: "0px 2px 0px 2px var(--neutral-900) inset",
                     }}
                     className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#010101]"
-                >
-                  
-                </div>
+                ></div>
             </div>
             <motion.div
                 style={{
@@ -170,7 +168,7 @@ export const Lid = ({
             >
                 <div className="absolute inset-0 rounded-lg bg-[#272729]" />
                 <img
-                    src="main-screen.svg"
+                    src="https://ik.imagekit.io/0oeuxr64bc/MainPicFinal.png?updatedAt=1740297446299"
                     alt="aceternity logo"
                     className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
                 />

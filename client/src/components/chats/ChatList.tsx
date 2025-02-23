@@ -52,7 +52,7 @@ function ChatList() {
                         }
                     >
                         <div className="flex justify-between">
-                            <span className="text-xs text-primary">
+                            <span className="text-xs text-white">
                                 {message.username}
                             </span>
                             <span className="text-xs text-white">

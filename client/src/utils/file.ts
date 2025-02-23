@@ -1,11 +1,21 @@
 import { FileSystemItem, Id } from "@/types/file"
 import { v4 as uuidv4 } from "uuid"
 
-const initialCode = `function sayHi() {
-  console.log("👋 Hello world");
-}
+const initialCode = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeNexus</title>
+</head>
+<body>
+    <h1>👋 Hello, Welcome to 🚀 CodeNexus! 🎉</h1>
+    <script>
+        console.log("✨ Hello from index.html 🌍");
+    </script>
 
-sayHi()`
+</body>
+</html>`
 
 export const initialFileStructure: FileSystemItem = {
     name: "root",
@@ -15,7 +25,7 @@ export const initialFileStructure: FileSystemItem = {
         {
             id: uuidv4(),
             type: "file",
-            name: "index.js",
+            name: "index.html",
             content: initialCode,
         },
     ],

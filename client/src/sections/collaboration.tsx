@@ -49,7 +49,7 @@ export const Collaboration = () => {
                     >
                         <motion.img
                             style={{ opacity }}
-                            src="/main-screen.svg"
+                            src="https://ik.imagekit.io/0oeuxr64bc/MainPicFinal.png?updatedAt=1740297446299"
                             className="h-auto w-[70vw] max-w-[800px]" // Ensures image remains centered
                         />
                     </motion.div>

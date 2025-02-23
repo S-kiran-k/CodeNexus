@@ -184,7 +184,7 @@ export const SamePage = () => {
                           "--scale": scale,
                       })}
                   >
-                      <img src="/main-screen.svg" className="h-auto w-full" />
+                      <img src="https://ik.imagekit.io/0oeuxr64bc/MainPicFinal.png?updatedAt=1740297446299" className="h-auto w-full" />
                   </motion.div>
               </div>
               <motion.p

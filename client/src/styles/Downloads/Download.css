@@ -1,0 +1,55 @@
+.Download-button {
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 15px; /* Slightly reduced font size */
+  padding: 10px 16px; /* Adjusted padding */
+  color: white;
+  background: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  border: none;
+  box-shadow: 0 0.6em 1.3em -0.5em rgba(59, 48, 78, 0.527);
+  letter-spacing: 0.04em;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.Download-button svg {
+  margin-right: 6px;
+  width: 20px; /* Reduced icon size but still visible */
+}
+
+.Download-button:hover {
+  box-shadow: 0 0.4em 1em -0.3em #3b82f6;
+  border-top-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.Download-button:active {
+  box-shadow: 0 0.2em 0.8em -0.3em #3b82f6;
+}
+
+.Download-button::before {
+  width: 2px; /* Slightly smaller */
+  height: 28%;
+}
+
+.Download-button::after {
+  width: 3.5px;
+  height: 35%;
+}
+
+.Download-button:hover::before,
+.Download-button:hover::after {
+  height: 55%;
+}
+
+.Download-button:hover::before {
+  transform: translate(4px, -12px) rotate(45deg);
+}
+
+.Download-button:hover::after {
+  transform: translate(-4px, 12px) rotate(45deg);
+}

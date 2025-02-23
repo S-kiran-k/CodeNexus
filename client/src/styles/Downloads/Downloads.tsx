@@ -1,20 +1,22 @@
-import { MonitorDownIcon } from "lucide-react"
-
+import "./Download.css"
 const Button = () => {
     return (
         <div className="relative">
-            <button className="w-[150px] py-2 px-8 border-none outline-none text-sm font-semibold rounded-md bg-gradient-to-br from-[#6a4caf] to-[#ff7f50] relative overflow-hidden cursor-pointer transition-transform duration-400 ease-in-out hover:bg-gradient-to-br hover:from-[#ff7f50] hover:to-[#6a4caf] active:scale-[0.97]">
-                <div className="flex justify-center items-center">
-                    <MonitorDownIcon className="mr-2 text-white" />
-                    Download
-                </div>
-                <div className="absolute inset-0 flex justify-center items-center opacity-0 group-hover:opacity-100 transform transition-transform duration-400 ease-in-out">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" className="bi bi-download w-6 h-6">
-                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                    </svg>
-                </div>
-            </button>
+<button className="Download-button">
+  <svg
+    viewBox="0 0 640 512"
+    width="20"
+    height="16"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill="white"
+      d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-167l80 80c9.4 9.4 24.6 9.4 33.9 0l80-80c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-39 39V184c0-13.3-10.7-24-24-24s-24 10.7-24 24V318.1l-39-39c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9z"
+    ></path>
+  </svg>
+  <span>Download</span>
+</button>
+
         </div>
     )
 }

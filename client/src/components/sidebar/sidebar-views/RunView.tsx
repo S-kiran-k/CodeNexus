@@ -67,7 +67,7 @@ function RunView() {
                     onChange={(e) => setInput(e.target.value)}
                 />
                 <button
-                    className="flex w-full justify-center rounded-md bg-primary p-2 font-bold text-black outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex w-full justify-center rounded-md bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 p-2 font-bold text-white outline-none transition-all duration-300 hover:scale-105 hover:from-gray-800 hover:via-gray-700 hover:to-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
                     onClick={runCode}
                     disabled={isRunning}
                 >
