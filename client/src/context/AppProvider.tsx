@@ -6,6 +6,7 @@ import { RunCodeContextProvider } from "./RunCodeContext.jsx"
 import { SettingContextProvider } from "./SettingContext.jsx"
 import { SocketProvider } from "./SocketContext.jsx"
 import { ViewContextProvider } from "./ViewContext.js"
+import { AiChatContextProvider } from "./AiChatContext.js" // ✅ Use the correct provider
 
 function AppProvider({ children }: { children: ReactNode }) {
     return (
@@ -16,7 +17,11 @@ function AppProvider({ children }: { children: ReactNode }) {
                         <FileContextProvider>
                             <RunCodeContextProvider>
                                 <ChatContextProvider>
-                                    {children}
+                                    <AiChatContextProvider>
+                                        {" "}
+                                        {/* ✅ Correct */}
+                                        {children}
+                                    </AiChatContextProvider>
                                 </ChatContextProvider>
                             </RunCodeContextProvider>
                         </FileContextProvider>

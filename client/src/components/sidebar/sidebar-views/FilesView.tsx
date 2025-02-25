@@ -194,13 +194,23 @@ function FilesView() {
                         onClick={handleOpenDirectory}
                         disabled={isLoading}
                     >
-                        {isLoading ? <Loader /> : <Input />}
+                        {isLoading ? (
+                            <Loader />
+                        ) : (
+                            <span>
+                                <Input />
+                            </span>
+                        )}{" "}
+                        {/* ✅ Wrap in a <span> */}
                     </button>
                     <button
                         className="flex flex-1 justify-start rounded-md p-2"
                         onClick={downloadFilesAndFolders}
                     >
-                        <Download />
+                        <span>
+                            <Download />
+                        </span>{" "}
+                        {/* ✅ Wrap in a <span> */}
                     </button>
                 </div>
             </div>

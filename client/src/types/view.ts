@@ -5,7 +5,7 @@ enum VIEWS {
     RUN = "RUN",
     SETTINGS = "SETTINGS",
     TERMINAL = "TERMINAL",
-    CHATAI = "CHATAI"
+    CHATAI = "EchoAI"
 }
 
 interface ViewContext {

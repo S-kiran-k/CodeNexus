@@ -1,75 +1,49 @@
-import { useState, FormEvent, useEffect, useRef } from "react"
+import { useChat } from "@/context/AiChatContext"
+import { FormEvent, useEffect, useRef, KeyboardEvent, useState } from "react"
 import ReactMarkdown from "react-markdown"
 
-type Role = "user" | "ai"
-
-interface Message {
-    role: Role
-    content: string
-    timestamp: string
-}
-
-
 export default function ChatAI() {
-    const [messages, setMessages] = useState<Message[]>([])
+    const { messages, addMessage } = useChat()
+    const chatEndRef = useRef<HTMLDivElement>(null)
     const [question, setQuestion] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
-    const chatEndRef = useRef<HTMLDivElement>(null)
 
-   const handleSubmit = async (e: FormEvent | KeyboardEvent) => {
-       e.preventDefault()
-       if (!question.trim()) return
+    const handleSubmit = async (e: FormEvent | KeyboardEvent) => {
+        e.preventDefault()
+        if (!question.trim()) return
 
-       const timestamp = new Date().toLocaleTimeString([], {
-           hour: "2-digit",
-           minute: "2-digit",
-       })
+        const timestamp = new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+        })
 
-       // ✅ Clean & Type-Safe
-       const newMessages: Message[] = [
-           ...messages,
-           { role: "user", content: question, timestamp },
-       ]
+        // Add user message to context
+        addMessage({ role: "user", content: question, timestamp })
+        setQuestion("")
+        setLoading(true)
+        setError(null)
 
-       setMessages(newMessages)
-       setQuestion("")
-       setLoading(true)
-       setError(null)
+        try {
+            const res = await fetch("http://localhost:3000/api/content", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question }),
+            })
 
-       try {
-           const res = await fetch("http://localhost:3000/api/content", {
-               method: "POST",
-               headers: {
-                   "Content-Type": "application/json",
-               },
-               body: JSON.stringify({ question }),
-           })
+            const data: { result?: string; error?: string } = await res.json()
 
-           const data: { result?: string; error?: string } = await res.json()
+            if (res.ok && data.result) {
+                addMessage({ role: "ai", content: data.result, timestamp })
+            } else {
+                setError(data.error || "Something went wrong")
+            }
+        } catch (err) {
+            setError("Failed to fetch response. Check your connection.")
+        }
 
-           if (res.ok && data.result) {
-               setMessages([
-                   ...newMessages,
-                   {
-                       role: "ai", // ✅ No type assertion needed
-                       content: data.result,
-                       timestamp: new Date().toLocaleTimeString([], {
-                           hour: "2-digit",
-                           minute: "2-digit",
-                       }),
-                   },
-               ])
-           } else {
-               setError(data.error || "Something went wrong")
-           }
-       } catch (err) {
-           setError("Failed to fetch response. Check your connection.")
-       }
-
-       setLoading(false)
-   }
-
+        setLoading(false)
+    }
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -130,7 +104,7 @@ export default function ChatAI() {
                         placeholder="Type your message..."
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)} // Handle Enter key properly
+                        onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
                         required
                     />
 

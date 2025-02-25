@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from "url"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [react()],
+    plugins: [react({ fastRefresh: true })], // ✅ Enable Fast Refresh
     build: {
         chunkSizeWarningLimit: 1600,
         rollupOptions: {
