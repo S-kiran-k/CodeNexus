@@ -7,7 +7,7 @@ import TerminalView from "@/components/sidebar/sidebar-views/TerminalView"
 import UsersView from "@/components/sidebar/sidebar-views/UsersView"
 import useWindowDimensions from "@/hooks/useWindowDimensions"
 import { VIEWS, ViewContext as ViewContextType } from "@/types/view"
-import { SquareTerminal } from "lucide-react"
+import {BotMessageSquare, SquareTerminal } from "lucide-react"
 import { ReactNode, createContext, useContext, useState } from "react"
 import { IoSettingsOutline } from "react-icons/io5"
 import { LuFiles } from "react-icons/lu"
@@ -46,8 +46,7 @@ function ViewContextProvider({ children }: { children: ReactNode }) {
         [VIEWS.CHATS]: <PiChats size={30} />,
         [VIEWS.RUN]: <PiPlay size={28} />,
         [VIEWS.TERMINAL]: <SquareTerminal />,
-        [VIEWS.CHATAI] : <SquareTerminal />,
-
+        [VIEWS.CHATAI]: <BotMessageSquare />,
     })
 
     return (

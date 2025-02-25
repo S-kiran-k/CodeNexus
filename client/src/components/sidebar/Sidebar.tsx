@@ -81,7 +81,7 @@ function Sidebar() {
                 />
                 <SidebarButton
                     viewName={VIEWS.CHATAI}
-                    icon={viewIcons[VIEWS.TERMINAL]}
+                    icon={viewIcons[VIEWS.CHATAI]}
                 />
 
                 {/* Button to change activity state coding or drawing */}

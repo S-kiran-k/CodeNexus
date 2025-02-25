@@ -2,9 +2,9 @@ import { useState, FormEvent, useEffect, useRef } from "react"
 import ReactMarkdown from "react-markdown"
 
 interface Message {
-    role: "user" | "ai"
+    role: "user" | "ai" // Keep this strictly typed
     content: string
-    timestamp: string
+    timestamp: string // Include timestamp
 }
 
 export default function ChatAI() {
@@ -14,7 +14,7 @@ export default function ChatAI() {
     const [error, setError] = useState<string | null>(null)
     const chatEndRef = useRef<HTMLDivElement>(null)
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent | KeyboardEvent) => {
         e.preventDefault()
         if (!question.trim()) return
 
@@ -23,7 +23,7 @@ export default function ChatAI() {
             minute: "2-digit",
         })
 
-        const newMessages = [
+        const newMessages: Message[] = [
             ...messages,
             { role: "user", content: question, timestamp },
         ]
@@ -124,7 +124,7 @@ export default function ChatAI() {
                         placeholder="Type your message..."
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)} // Handle Enter key
+                        onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)} // Handle Enter key properly
                         required
                     />
 
