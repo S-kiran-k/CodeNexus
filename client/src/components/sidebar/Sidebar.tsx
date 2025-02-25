@@ -79,6 +79,10 @@ function Sidebar() {
                     viewName={VIEWS.TERMINAL}
                     icon={viewIcons[VIEWS.TERMINAL]}
                 />
+                <SidebarButton
+                    viewName={VIEWS.CHATAI}
+                    icon={viewIcons[VIEWS.TERMINAL]}
+                />
 
                 {/* Button to change activity state coding or drawing */}
                 <div className="flex h-fit items-center justify-center">

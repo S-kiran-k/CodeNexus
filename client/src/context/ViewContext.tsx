@@ -1,3 +1,4 @@
+import ChatAi from "@/components/sidebar/sidebar-views/ChatAi"
 import ChatsView from "@/components/sidebar/sidebar-views/ChatsView"
 import FilesView from "@/components/sidebar/sidebar-views/FilesView"
 import RunView from "@/components/sidebar/sidebar-views/RunView"
@@ -34,7 +35,8 @@ function ViewContextProvider({ children }: { children: ReactNode }) {
         [VIEWS.SETTINGS]: <SettingsView />,
         [VIEWS.CHATS]: <ChatsView />,
         [VIEWS.RUN]: <RunView />,
-        [VIEWS.TERMINAL]:  <TerminalView/>
+        [VIEWS.TERMINAL]:  <TerminalView/>,
+        [VIEWS.CHATAI]:  <ChatAi/>
         ,
     })
     const [viewIcons] = useState({
@@ -44,6 +46,8 @@ function ViewContextProvider({ children }: { children: ReactNode }) {
         [VIEWS.CHATS]: <PiChats size={30} />,
         [VIEWS.RUN]: <PiPlay size={28} />,
         [VIEWS.TERMINAL]: <SquareTerminal />,
+        [VIEWS.CHATAI] : <SquareTerminal />,
+
     })
 
     return (
