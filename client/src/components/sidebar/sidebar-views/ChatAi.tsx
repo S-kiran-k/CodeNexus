@@ -1,11 +1,14 @@
 import { useState, FormEvent, useEffect, useRef } from "react"
 import ReactMarkdown from "react-markdown"
 
+type Role = "user" | "ai"
+
 interface Message {
-    role: "user" | "ai" // Keep this strictly typed
+    role: Role
     content: string
-    timestamp: string // Include timestamp
+    timestamp: string
 }
+
 
 export default function ChatAI() {
     const [messages, setMessages] = useState<Message[]>([])
@@ -14,56 +17,59 @@ export default function ChatAI() {
     const [error, setError] = useState<string | null>(null)
     const chatEndRef = useRef<HTMLDivElement>(null)
 
-    const handleSubmit = async (e: FormEvent | KeyboardEvent) => {
-        e.preventDefault()
-        if (!question.trim()) return
+   const handleSubmit = async (e: FormEvent | KeyboardEvent) => {
+       e.preventDefault()
+       if (!question.trim()) return
 
-        const timestamp = new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-        })
+       const timestamp = new Date().toLocaleTimeString([], {
+           hour: "2-digit",
+           minute: "2-digit",
+       })
 
-        const newMessages: Message[] = [
-            ...messages,
-            { role: "user", content: question, timestamp },
-        ]
-        setMessages(newMessages)
-        setQuestion("")
-        setLoading(true)
-        setError(null)
+       // ✅ Clean & Type-Safe
+       const newMessages: Message[] = [
+           ...messages,
+           { role: "user", content: question, timestamp },
+       ]
 
-        try {
-            const res = await fetch("http://localhost:3000/api/content", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ question }),
-            })
+       setMessages(newMessages)
+       setQuestion("")
+       setLoading(true)
+       setError(null)
 
-            const data: { result?: string; error?: string } = await res.json()
+       try {
+           const res = await fetch("http://localhost:3000/api/content", {
+               method: "POST",
+               headers: {
+                   "Content-Type": "application/json",
+               },
+               body: JSON.stringify({ question }),
+           })
 
-            if (res.ok && data.result) {
-                setMessages([
-                    ...newMessages,
-                    {
-                        role: "ai",
-                        content: data.result,
-                        timestamp: new Date().toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                        }),
-                    },
-                ])
-            } else {
-                setError(data.error || "Something went wrong")
-            }
-        } catch (err) {
-            setError("Failed to fetch response. Check your connection.")
-        }
+           const data: { result?: string; error?: string } = await res.json()
 
-        setLoading(false)
-    }
+           if (res.ok && data.result) {
+               setMessages([
+                   ...newMessages,
+                   {
+                       role: "ai", // ✅ No type assertion needed
+                       content: data.result,
+                       timestamp: new Date().toLocaleTimeString([], {
+                           hour: "2-digit",
+                           minute: "2-digit",
+                       }),
+                   },
+               ])
+           } else {
+               setError(data.error || "Something went wrong")
+           }
+       } catch (err) {
+           setError("Failed to fetch response. Check your connection.")
+       }
+
+       setLoading(false)
+   }
+
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
