@@ -1,6 +1,7 @@
 import { useChat } from "@/context/AiChatContext"
 import { FormEvent, useEffect, useRef, KeyboardEvent, useState } from "react"
 import ReactMarkdown from "react-markdown"
+import { fetchChatResponse } from "@/api/ChatApi"
 
 export default function ChatAI() {
     const { messages, addMessage } = useChat()
@@ -25,18 +26,16 @@ export default function ChatAI() {
         setError(null)
 
         try {
-            const res = await fetch("http://localhost:3000/api/content", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ question }),
-            })
+            const data = await fetchChatResponse(question)
 
-            const data: { result?: string; error?: string } = await res.json()
-
-            if (res.ok && data.result) {
-                addMessage({ role: "ai", content: data.result, timestamp })
+            if (data && data.choices?.length) {
+                addMessage({
+                    role: "ai",
+                    content: data.choices[0].message.content,
+                    timestamp,
+                })
             } else {
-                setError(data.error || "Something went wrong")
+                setError("Failed to fetch AI response.")
             }
         } catch (err) {
             setError("Failed to fetch response. Check your connection.")
@@ -50,8 +49,9 @@ export default function ChatAI() {
     }, [messages, loading])
 
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-black text-white">
-            <div className="flex h-full w-full max-w-lg flex-col overflow-hidden rounded-lg bg-zinc-900 shadow-lg">
+        <div className="flex h-full w-full bg-black text-white">
+            {/* Chat Container */}
+            <div className="flex h-full w-full flex-col overflow-hidden rounded-lg bg-zinc-900 shadow-lg">
                 {/* Navbar */}
                 <div className="flex items-center justify-between bg-zinc-800 p-4">
                     <span className="text-lg font-semibold text-gray-300">
@@ -100,7 +100,7 @@ export default function ChatAI() {
                 <div className="flex items-center bg-zinc-800 p-3">
                     <input
                         type="text"
-                        className="flex-1 rounded-md bg-black px-3 py-2 text-sm text-white hover:border-cyan-400 focus:outline-none"
+                        className="flex-1 rounded-md bg-black px-3 py-2 text-sm text-white focus:outline-none"
                         placeholder="Type your message..."
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
@@ -119,7 +119,10 @@ export default function ChatAI() {
                         >
                             <path
                                 fill="currentColor"
-                                d="M481.508,210.336L68.414,38.926c-17.403-7.222-37.064-4.045-51.309,8.287C2.86,59.547-3.098,78.551,1.558,96.808 L38.327,241h180.026c8.284,0,15.001,6.716,15.001,15.001c0,8.284-6.716,15.001-15.001,15.001H38.327L1.558,415.193 c-4.656,18.258,1.301,37.262,15.547,49.595c14.274,12.357,33.937,15.495,51.31,8.287l413.094-171.409 C500.317,293.862,512,276.364,512,256.001C512,235.638,500.317,218.139,481.508,210.336z"
+                                d="M481.508,210.336L68.414,38.926c-17.403-7.222-37.064-4.045-51.309,8.287C2.86,59.547-3.098,78.551,1.558,96.808 
+                                L38.327,241h180.026c8.284,0,15.001,6.716,15.001,15.001c0,8.284-6.716,15.001-15.001,15.001H38.327L1.558,415.193 
+                                c-4.656,18.258,1.301,37.262,15.547,49.595c14.274,12.357,33.937,15.495,51.31,8.287l413.094-171.409 
+                                C500.317,293.862,512,276.364,512,256.001C512,235.638,500.317,218.139,481.508,210.336z"
                             ></path>
                         </svg>
                     </button>

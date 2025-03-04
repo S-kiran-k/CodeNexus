@@ -6,10 +6,9 @@ import { SocketEvent, SocketId } from "./types/socket"
 import { USER_CONNECTION_STATUS, User } from "./types/user"
 import { Server } from "socket.io"
 // import { WebSocketServer, WebSocket } from "ws";
-import {spawn} from "node-pty";
+import { spawn } from "node-pty";
 import path from "path"
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-
+import {GoogleGenerativeAI} from "@google/generative-ai"
 dotenv.config()
 
 const app = express()
@@ -18,11 +17,15 @@ app.use(express.json())
 app.use(cors())
 
 app.use(express.static(path.join(__dirname, "public"))) // Serve static files
-const gemini_api_key = process.env.API_KEY;
-const googleAI = new GoogleGenerativeAI(gemini_api_key);
-const geminiModel = googleAI.getGenerativeModel({
-  model: "gemini-1.5-flash",
-});
+// const gemini_api_key  = process.env.GEMINI_API_KEY;
+// if (!gemini_api_key) {
+// 	throw new Error("GEMINI_API_KEY is not defined. Check your .env file.");
+// }
+
+// const googleAI = new GoogleGenerativeAI(gemini_api_key);
+// const geminiModel = googleAI.getGenerativeModel({
+// 	model: "gemini-1.5-flash",
+// });
 const server = http.createServer(app)
 const io = new Server(server, {
 	cors: {
@@ -81,10 +84,10 @@ io.on("connection", (socket) => {
 
 	socket.on("disconnect", () => {
 		console.log("Socket.io Disconnected");
-		ptyProcess.kill(); 
+		ptyProcess.kill();
 	});
 
-	
+
 	// Handle user actions
 	socket.on(SocketEvent.JOIN_REQUEST, ({ roomId, username }) => {
 		// Check is username exist in the room
@@ -293,49 +296,49 @@ io.on("connection", (socket) => {
 const PORT = process.env.PORT || 3000
 
 
-const generate = async (question: string) => {
-	try {
-		if (!question) {
-			throw new Error("No question provided");
-		}
+// const generate = async (question: string) => {
+// 	try {
+// 		if (!question) {
+// 			throw new Error("No question provided");
+// 		}
 
-		const result = await geminiModel.generateContent(question);
+// 		const result = await geminiModel.generateContent(question);
 
-		if (!result || !result.response) {
-			throw new Error("Invalid response from Gemini API");
-		}
+// 		if (!result || !result.response) {
+// 			throw new Error("Invalid response from Gemini API");
+// 		}
 
-		const responseText = await result.response.text(); // Ensure it's properly awaited
+// 		const responseText = await result.response.text(); // Ensure it's properly awaited
 
-		return responseText;
-	} catch (error) {
-		console.error("Gemini AI Error:", error);
-		return "Error generating content";
-	}
-};
+// 		return responseText;
+// 	} catch (error) {
+// 		console.error("Gemini AI Error:", error);
+// 		return "Error generating content";
+// 	}
+// };
 
 
-app.post("/api/content", async (req, res) => {
-	try {
-		const { question } = req.body;
-		if (/codenexus|your project|about this website/i.test(question)) {
-			return res.json({
-				result: "CodeNexus is a collaborative, real-time web-based code editor with an integrated terminal, file system support, and AI assistance.",
-			});
-		}
+// app.post("/api/content", async (req, res) => {
+// 	try {
+// 		const { question } = req.body;
+// 		if (/codenexus|your project|about this website/i.test(question)) {
+// 			return res.json({
+// 				result: "CodeNexus is a collaborative, real-time web-based code editor with an integrated terminal, file system support, and AI assistance.",
+// 			});
+// 		}
 
-		if (!question) {
-			return res.status(400).json({ error: "Question is required" });
-		}
+// 		if (!question) {
+// 			return res.status(400).json({ error: "Question is required" });
+// 		}
 
-		const result = await generate(question);
+// 		const result = await generate(question);
 
-		return res.json({ result });
-	} catch (error) {
-		console.error("API Error:", error);
-		return res.status(500).json({ error: "Internal Server Error" });
-	}
-});
+// 		return res.json({ result });
+// 	} catch (error) {
+// 		console.error("API Error:", error);
+// 		return res.status(500).json({ error: "Internal Server Error" });
+// 	}
+// });
 
 app.get("/", (req: Request, res: Response) => {
 	// Send the index.html file
