@@ -50,12 +50,12 @@ export function SparklesPreview() {
                     transition={{ delay: 0.6, duration: 1 }}
                     className="mt-6"
                 >
-                    <a
+                    {/* <a
                         href="/form"
                         className="inline-block rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-3 text-lg font-semibold text-white shadow-lg transition-transform duration-300 hover:scale-105"
                     >
                         Get Started →
-                    </a>
+                    </a> */}
                 </motion.div>
             </div>
         </div>
