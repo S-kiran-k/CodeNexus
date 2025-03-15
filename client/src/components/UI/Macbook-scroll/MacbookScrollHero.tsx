@@ -103,18 +103,24 @@ export function MacbookScrollHero() {
 const Badge = ({ className }: { className?: string }) => {
     return (
         <svg
-            width="24"
-            height="24"
+            width="56"
+            height="56"
             viewBox="0 0 56 56"
-            fill="none"
             xmlns="http://www.w3.org/2000/svg"
             className={className}
         >
-            <circle cx="28" cy="28" r="28" fill="#00AA45" />
-            <path
-                d="M27.0769 12H15V46H24.3846V38.8889H27.0769C34.7305 38.8889 41 32.9048 41 25.4444C41 17.984 34.7305 12 27.0769 12ZM24.3846 29.7778V21.1111H27.0769C29.6194 21.1111 31.6154 23.0864 31.6154 25.4444C31.6154 27.8024 29.6194 29.7778 27.0769 29.7778H24.3846Z"
-                fill="white"
+            <circle cx="28" cy="28" r="28" fill="black" />
+            <image
+                href="https://ik.imagekit.io/0oeuxr64bc/logo.jpg?updatedAt=1741094558070"
+                x="8" // Adjust these values to center the image
+                y="8"
+                width="40"
+                height="40"
+                clipPath="circle(20px at center)"
             />
         </svg>
     )
 }
+
+export default Badge
+

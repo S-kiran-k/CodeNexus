@@ -1,24 +1,26 @@
+import { Link } from "react-router-dom"
 import { SparklesCore } from "./Sparkles"
 import { motion } from "framer-motion"
 
 export function SparklesPreview() {
     return (
-        <div className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-black">
+        <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-md bg-black">
             {/* Sparkles Background */}
-            <div className="absolute inset-0 h-full w-full">
+            <div className="absolute inset-0 h-screen w-full">
                 <SparklesCore
-                    id="tsparticleshero"
+                    id="tsparticlesfullpage"
                     background="transparent"
                     minSize={0.6}
                     maxSize={1.4}
-                    particleDensity={80}
+                    particleDensity={100}
                     className="h-full w-full"
                     particleColor="#FFFFFF"
                 />
             </div>
+            
 
             {/* Content */}
-            <div className="relative z-10 px-6 text-center">
+            <div className="relative z-20 px-6 text-center">
                 {/* Animated Heading */}
                 <motion.h1
                     initial={{ opacity: 0, y: -30 }}
@@ -50,12 +52,12 @@ export function SparklesPreview() {
                     transition={{ delay: 0.6, duration: 1 }}
                     className="mt-6"
                 >
-                    {/* <a
-                        href="/form"
+                    <Link
+                        to="/form"
                         className="inline-block rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-3 text-lg font-semibold text-white shadow-lg transition-transform duration-300 hover:scale-105"
                     >
                         Get Started →
-                    </a> */}
+                    </Link>
                 </motion.div>
             </div>
         </div>

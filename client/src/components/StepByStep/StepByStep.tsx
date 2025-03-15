@@ -69,14 +69,13 @@ export function StepByStep() {
             ),
         },
         {
-            title: "Step 4: Testing & Optimization",
+            title: "Step 4: Collaborative Coding",
             content: (
                 <div>
                     <p className="mb-8 text-xs font-normal text-white md:text-xl">
-                        Ensure a seamless coding experience by reviewing changes
-                        in real-time. Debug code collaboratively, track updates
-                        with version history, and refine your project with
-                        instant feedback from teammates.
+                        Write and edit code together in real-time. Enhance
+                        productivity by working simultaneously with teammates,
+                        ensuring smooth collaboration and instant updates.
                     </p>
                     <div className="mb-4 flex justify-start     ">
                         <FaRocket className="text-5xl text-red-400" />

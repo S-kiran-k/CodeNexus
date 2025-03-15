@@ -55,6 +55,11 @@ body {
     }
 }
 
+#tsparticleshero canvas {
+    pointer-events: none;
+}
+
+
 /* Editor */
 
 .cm-editor {

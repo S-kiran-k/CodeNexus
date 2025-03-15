@@ -1,49 +1,50 @@
-import express, { Response, Request } from "express"
-import dotenv from "dotenv"
-import http from "http"
-import cors from "cors"
-import { SocketEvent, SocketId } from "./types/socket"
-import { USER_CONNECTION_STATUS, User } from "./types/user"
-import { Server } from "socket.io"
-// import { WebSocketServer, WebSocket } from "ws";
-import { spawn } from "node-pty";
-import path from "path"
-import {GoogleGenerativeAI} from "@google/generative-ai"
+// Import required modules and libraries
+import express, { Response, Request } from "express" // Express for routing and handling HTTP requests
+import dotenv from "dotenv" // dotenv to load environment variables
+import http from "http" // HTTP module for server creation
+import cors from "cors" // CORS for enabling cross-origin requests
+import { SocketEvent, SocketId } from "./types/socket" // Custom types for socket events and IDs
+import { USER_CONNECTION_STATUS, User } from "./types/user" // Custom types for user data and connection status
+import { Server } from "socket.io" // Socket.IO for real-time communication
+// import { WebSocketServer, WebSocket } from "ws"; // WebSocket server (commented out)
+import { spawn } from "node-pty" // node-pty for spawning terminal processes
+import path from "path" // Path utility for file system operations
+import { GoogleGenerativeAI } from "@google/generative-ai" // Google Generative AI (commented out)
+
+// Load environment variables from .env file
 dotenv.config()
 
+// Initialize express app
 const app = express()
-app.use(express.json())
 
+// Middleware to parse JSON and handle cross-origin requests
+app.use(express.json())
 app.use(cors())
 
-app.use(express.static(path.join(__dirname, "public"))) // Serve static files
-// const gemini_api_key  = process.env.GEMINI_API_KEY;
-// if (!gemini_api_key) {
-// 	throw new Error("GEMINI_API_KEY is not defined. Check your .env file.");
-// }
+// Serve static files (e.g., front-end assets)
+app.use(express.static(path.join(__dirname, "public")))
 
-// const googleAI = new GoogleGenerativeAI(gemini_api_key);
-// const geminiModel = googleAI.getGenerativeModel({
-// 	model: "gemini-1.5-flash",
-// });
+// Create HTTP server
 const server = http.createServer(app)
+
+// Initialize Socket.IO server with configurations
 const io = new Server(server, {
 	cors: {
-		origin: "*",
+		origin: "*", // Allow connections from all origins
 	},
-	maxHttpBufferSize: 1e8,
-	pingTimeout: 60000,
+	maxHttpBufferSize: 1e8, // Max buffer size for HTTP requests
+	pingTimeout: 60000, // Timeout for ping response
 })
 
+// Array to map users to their sockets
 let userSocketMap: User[] = []
 
-// Function to get all users in a room
+// Function to get users in a specific room
 function getUsersInRoom(roomId: string): User[] {
 	return userSocketMap.filter((user) => user.roomId == roomId)
 }
 
-
-// Function to get room id by socket id
+// Function to get room ID associated with a socket ID
 function getRoomId(socketId: SocketId): string | null {
 	const roomId = userSocketMap.find(
 		(user) => user.socketId === socketId
@@ -56,6 +57,7 @@ function getRoomId(socketId: SocketId): string | null {
 	return roomId
 }
 
+// Function to get user by socket ID
 function getUserBySocketId(socketId: SocketId): User | null {
 	const user = userSocketMap.find((user) => user.socketId === socketId)
 	if (!user) {
@@ -65,40 +67,42 @@ function getUserBySocketId(socketId: SocketId): User | null {
 	return user
 }
 
+// Socket.IO connection event
 io.on("connection", (socket) => {
-	// Example: Retrieve uploaded directory dynamically (You need to implement this)
-
-	// Start a new PTY process (bash shell) in the user's uploaded directory
+	// Start a new PTY (pseudo-terminal) process for each connected user
 	const ptyProcess = spawn("bash", [], {
-		name: "xterm-color",
-		env: process.env,
+		name: "xterm-color", // Terminal type
+		env: process.env, // Use environment variables
 	});
 
+	// Handle data from the PTY process and send it to the socket
 	ptyProcess.onData((data) => {
 		socket.emit("terminal-output", data);
 	});
 
+	// Handle terminal input from the socket and pass it to the PTY process
 	socket.on("terminal-input", (input) => {
 		ptyProcess.write(input);
 	});
 
+	// Handle socket disconnection and kill the PTY process
 	socket.on("disconnect", () => {
 		console.log("Socket.io Disconnected");
 		ptyProcess.kill();
 	});
 
-
-	// Handle user actions
+	// Handle user join requests
 	socket.on(SocketEvent.JOIN_REQUEST, ({ roomId, username }) => {
-		// Check is username exist in the room
+		// Check if the username already exists in the room
 		const isUsernameExist = getUsersInRoom(roomId).filter(
 			(u) => u.username === username
 		)
 		if (isUsernameExist.length > 0) {
-			io.to(socket.id).emit(SocketEvent.USERNAME_EXISTS)
+			io.to(socket.id).emit(SocketEvent.USERNAME_EXISTS) // Notify user if username exists
 			return
 		}
 
+		// Add user to the user map and broadcast to the room
 		const user = {
 			username,
 			roomId,
@@ -115,6 +119,7 @@ io.on("connection", (socket) => {
 		io.to(socket.id).emit(SocketEvent.JOIN_ACCEPTED, { user, users })
 	})
 
+	// Handle user disconnection
 	socket.on("disconnecting", () => {
 		const user = getUserBySocketId(socket.id)
 		if (!user) return
@@ -126,30 +131,25 @@ io.on("connection", (socket) => {
 		socket.leave(roomId)
 	})
 
-	// Handle file actions
-	socket.on(
-		SocketEvent.SYNC_FILE_STRUCTURE,
-		({ fileStructure, openFiles, activeFile, socketId }) => {
-			io.to(socketId).emit(SocketEvent.SYNC_FILE_STRUCTURE, {
-				fileStructure,
-				openFiles,
-				activeFile,
-			})
-		}
-	)
+	// File-related events (synchronizing file structure, creating, updating, deleting files)
+	socket.on(SocketEvent.SYNC_FILE_STRUCTURE, ({ fileStructure, openFiles, activeFile, socketId }) => {
+		io.to(socketId).emit(SocketEvent.SYNC_FILE_STRUCTURE, {
+			fileStructure,
+			openFiles,
+			activeFile,
+		})
+	})
 
-	socket.on(
-		SocketEvent.DIRECTORY_CREATED,
-		({ parentDirId, newDirectory }) => {
-			const roomId = getRoomId(socket.id)
-			if (!roomId) return
-			socket.broadcast.to(roomId).emit(SocketEvent.DIRECTORY_CREATED, {
-				parentDirId,
-				newDirectory,
-			})
-		}
-	)
+	socket.on(SocketEvent.DIRECTORY_CREATED, ({ parentDirId, newDirectory }) => {
+		const roomId = getRoomId(socket.id)
+		if (!roomId) return
+		socket.broadcast.to(roomId).emit(SocketEvent.DIRECTORY_CREATED, {
+			parentDirId,
+			newDirectory,
+		})
+	})
 
+	// Handle directory updates, renaming, and deletions (similar structure as file actions)
 	socket.on(SocketEvent.DIRECTORY_UPDATED, ({ dirId, children }) => {
 		const roomId = getRoomId(socket.id)
 		if (!roomId) return
@@ -176,6 +176,7 @@ io.on("connection", (socket) => {
 			.emit(SocketEvent.DIRECTORY_DELETED, { dirId })
 	})
 
+	// Similar handling for file creation, updating, renaming, and deletion
 	socket.on(SocketEvent.FILE_CREATED, ({ parentDirId, newFile }) => {
 		const roomId = getRoomId(socket.id)
 		if (!roomId) return
@@ -208,7 +209,7 @@ io.on("connection", (socket) => {
 		socket.broadcast.to(roomId).emit(SocketEvent.FILE_DELETED, { fileId })
 	})
 
-	// Handle user status
+	// Handle user status changes (online/offline)
 	socket.on(SocketEvent.USER_OFFLINE, ({ socketId }) => {
 		userSocketMap = userSocketMap.map((user) => {
 			if (user.socketId === socketId) {
@@ -233,7 +234,7 @@ io.on("connection", (socket) => {
 		socket.broadcast.to(roomId).emit(SocketEvent.USER_ONLINE, { socketId })
 	})
 
-	// Handle chat actions
+	// Handle chat actions (sending and receiving messages)
 	socket.on(SocketEvent.SEND_MESSAGE, ({ message }) => {
 		const roomId = getRoomId(socket.id)
 		if (!roomId) return
@@ -242,7 +243,7 @@ io.on("connection", (socket) => {
 			.emit(SocketEvent.RECEIVE_MESSAGE, { message })
 	})
 
-	// Handle cursor position
+	// Handle cursor position for typing indication
 	socket.on(SocketEvent.TYPING_START, ({ cursorPosition }) => {
 		userSocketMap = userSocketMap.map((user) => {
 			if (user.socketId === socket.id) {
@@ -269,6 +270,7 @@ io.on("connection", (socket) => {
 		socket.broadcast.to(roomId).emit(SocketEvent.TYPING_PAUSE, { user })
 	})
 
+	// Handle drawing requests and updates (for collaborative drawing)
 	socket.on(SocketEvent.REQUEST_DRAWING, () => {
 		const roomId = getRoomId(socket.id)
 		if (!roomId) return
@@ -292,59 +294,16 @@ io.on("connection", (socket) => {
 	})
 })
 
-
+// Set the port for the server to listen on
 const PORT = process.env.PORT || 3000
 
-
-// const generate = async (question: string) => {
-// 	try {
-// 		if (!question) {
-// 			throw new Error("No question provided");
-// 		}
-
-// 		const result = await geminiModel.generateContent(question);
-
-// 		if (!result || !result.response) {
-// 			throw new Error("Invalid response from Gemini API");
-// 		}
-
-// 		const responseText = await result.response.text(); // Ensure it's properly awaited
-
-// 		return responseText;
-// 	} catch (error) {
-// 		console.error("Gemini AI Error:", error);
-// 		return "Error generating content";
-// 	}
-// };
-
-
-// app.post("/api/content", async (req, res) => {
-// 	try {
-// 		const { question } = req.body;
-// 		if (/codenexus|your project|about this website/i.test(question)) {
-// 			return res.json({
-// 				result: "CodeNexus is a collaborative, real-time web-based code editor with an integrated terminal, file system support, and AI assistance.",
-// 			});
-// 		}
-
-// 		if (!question) {
-// 			return res.status(400).json({ error: "Question is required" });
-// 		}
-
-// 		const result = await generate(question);
-
-// 		return res.json({ result });
-// 	} catch (error) {
-// 		console.error("API Error:", error);
-// 		return res.status(500).json({ error: "Internal Server Error" });
-// 	}
-// });
-
+// Handle HTTP GET request for the root route
 app.get("/", (req: Request, res: Response) => {
-	// Send the index.html file
+	// Send the index.html file for the front-end
 	res.sendFile(path.join(__dirname, "..", "public", "index.html"))
 })
 
+// Start the server and listen for incoming requests
 server.listen(PORT, () => {
 	console.log(`Listening on port ${PORT}`)
 })

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import {
     IconHome,
     IconMessage,
@@ -13,7 +14,25 @@ import Features from "@/components/Features/Features"
 import { StepByStep } from "@/components/StepByStep/StepByStep"
 import FinalSection from "@/components/FinalSection/FinalSection"
 import { FloatingNav } from "@/components/UI/Floating-Navbar/floating-navbar"
+import MainLoading from "../components/UI/MainLoading/MainLoading"
+
 export default function Home() {
+    const [isLoading, setIsLoading] = useState(true)
+
+    // Function to handle loading completion
+    const handleLoadingComplete = () => {
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
+        // Simulate loading delay (adjust time as needed)
+        const timeout = setTimeout(() => {
+            handleLoadingComplete() // Trigger after the delay
+        }, 2000)
+
+        return () => clearTimeout(timeout) // Clean up timeout on unmount
+    }, [])
+
     const navItems = [
         {
             name: "Home",
@@ -36,7 +55,6 @@ export default function Home() {
                 <IconMessage className="h-4 w-4 text-neutral-500 dark:text-white" />
             ),
         },
-
         {
             name: "GetStarted",
             link: "#final-section",
@@ -46,17 +64,20 @@ export default function Home() {
         },
     ]
 
+    if (isLoading) {
+        return <MainLoading onLoadingComplete={handleLoadingComplete} /> // Pass the function to handle loading completion
+    }
 
     return (
         <>
             <main>
                 <FloatingNav navItems={navItems} />
-                <section  id="home" className="min-h-screen">
+                <section id="home" className="min-h-screen">
                     <SparklesPreview />
                 </section>
                 <div className="relative z-10 w-full overflow-x-clip">
-                        <MacbookScrollHero />
-                        <Collaboration />
+                    <MacbookScrollHero />
+                    <Collaboration />
                     <section id="about" className="min-h-screen">
                         <SamePage />
                     </section>

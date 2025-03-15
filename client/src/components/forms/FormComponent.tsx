@@ -2,19 +2,33 @@ import { useAppContext } from "@/context/AppContext"
 import { useSocket } from "@/context/SocketContext"
 import { SocketEvent } from "@/types/socket"
 import { USER_STATUS } from "@/types/user"
-import { ChangeEvent, FormEvent, useEffect, useRef } from "react"
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react"
 import { toast } from "react-hot-toast"
 import { useLocation, useNavigate } from "react-router-dom"
 import { v4 as uuidv4 } from "uuid"
 import "./FormsComponent.css"
+import { FaHome } from "react-icons/fa"
+import MainLoading from "../UI/MainLoading/MainLoading"
 
 const FormComponent = () => {
     const location = useLocation()
     const { currentUser, setCurrentUser, status, setStatus } = useAppContext()
     const { socket } = useSocket()
-
+    const [isLoading, setIsLoading] = useState(true) // Full page loading state
+ const handleLoadingComplete = () => {
+     setIsLoading(false)
+ }
     const usernameRef = useRef<HTMLInputElement | null>(null)
     const navigate = useNavigate()
+
+    useEffect(() => {
+        // Simulate loading delay before showing the form
+        const timeout = setTimeout(() => {
+            setIsLoading(false)
+        }, 2000)
+
+        return () => clearTimeout(timeout)
+    }, [])
 
     const createNewRoomId = () => {
         setCurrentUser({ ...currentUser, roomId: uuidv4() })
@@ -49,7 +63,7 @@ const FormComponent = () => {
         e.preventDefault()
         if (status === USER_STATUS.ATTEMPTING_JOIN) return
         if (!validateForm()) return
-        toast.loading("Joining room...")
+
         setStatus(USER_STATUS.ATTEMPTING_JOIN)
         socket.emit(SocketEvent.JOIN_REQUEST, currentUser)
     }
@@ -86,70 +100,93 @@ const FormComponent = () => {
             socket.disconnect()
             socket.connect()
         }
-    }, [currentUser, location.state?.redirect, navigate, setStatus, socket, status])
+    }, [
+        currentUser,
+        location.state?.redirect,
+        navigate,
+        setStatus,
+        socket,
+        status,
+    ])
+
+    if (isLoading) {
+    return <MainLoading onLoadingComplete={handleLoadingComplete} />   
+ }
 
     return (
-        <div className="flex w-full max-w-[500px] flex-col items-center justify-center gap-4 p-4 sm:w-[500px] sm:p-8">
-            <form onSubmit={joinRoom} className="flex w-full flex-col gap-4">
-                <input
-                    type="text"
-                    name="roomId"
-                    placeholder="Room Id"
-                    className="w-64 w-full rounded-md border-2 bg-black p-2 px-3 py-3 text-white 
-focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onChange={handleInputChanges}
-                    value={currentUser.roomId}
-                />
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    className=" w-full rounded-md border-2 bg-black p-2 px-3 py-3 text-white 
-focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onChange={handleInputChanges}
-                    value={currentUser.username}
-                    ref={usernameRef}
-                />
-                <div className="mx-auto flex w-fit items-center justify-center">
-                    <div className="group">
-                        <button
-                            type="submit"
-                            className="relative inline-block cursor-pointer rounded-xl bg-gray-800 p-px font-semibold leading-6 text-white shadow-2xl shadow-zinc-900 transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
-                        >
-                            <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
-
-                            <span className="relative z-10 block rounded-xl bg-gray-950 px-6 py-3">
-                                <div className="relative z-10 flex items-center space-x-2">
-                                    <span className=" transition-all duration-500 group-hover:translate-x-1">
-                                        Click Here To Join
-                                    </span>
-                                    <svg
-                                        className="h-6 w-6 transition-transform duration-500 group-hover:translate-x-1"
-                                        data-slot="icon"
-                                        aria-hidden="true"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            clip-rule="evenodd"
-                                            d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
-                                            fill-rule="evenodd"
-                                        ></path>
-                                    </svg>
-                                </div>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </form>
+        <>
             <button
-                className="blink-1 cursor-pointer select-none text-white underline"
-                onClick={createNewRoomId}
+                onClick={() => navigate("/")}
+                className="fixed left-4 top-4 z-50 flex items-center justify-center rounded-full bg-gray-800 p-3 text-white shadow-md transition-all duration-300 ease-in-out hover:scale-110 hover:bg-gray-700"
             >
-                Generate Unique Room Id
+                <FaHome className="h-6 w-6" />
             </button>
-        </div>
+
+            <div className="flex w-full max-w-[500px] flex-col items-center justify-center gap-4 p-4 sm:w-[500px] sm:p-8">
+                <form
+                    onSubmit={joinRoom}
+                    className="flex w-full flex-col gap-4"
+                >
+                    <input
+                        type="text"
+                        name="roomId"
+                        placeholder="Room Id"
+                        className="w-full rounded-md border-2 bg-black p-2 px-3 py-3 text-white 
+focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        onChange={handleInputChanges}
+                        value={currentUser.roomId}
+                    />
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        className=" w-full rounded-md border-2 bg-black p-2 px-3 py-3 text-white 
+focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        onChange={handleInputChanges}
+                        value={currentUser.username}
+                        ref={usernameRef}
+                    />
+                    <div className="mx-auto flex w-fit items-center justify-center">
+                        <div className="group">
+                            <button
+                                type="submit"
+                                className="relative inline-block cursor-pointer rounded-xl bg-gray-800 p-px font-semibold leading-6 text-white shadow-2xl shadow-zinc-900 transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
+                            >
+                                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
+
+                                <span className="relative z-10 block rounded-xl bg-gray-950 px-6 py-3">
+                                    <div className="relative z-10 flex items-center space-x-2">
+                                        <span className=" transition-all duration-500 group-hover:translate-x-1">
+                                            Click Here To Join
+                                        </span>
+                                        <svg
+                                            className="h-6 w-6 transition-transform duration-500 group-hover:translate-x-1"
+                                            data-slot="icon"
+                                            aria-hidden="true"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                clip-rule="evenodd"
+                                                d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
+                                                fill-rule="evenodd"
+                                            ></path>
+                                        </svg>
+                                    </div>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <button
+                    className="blink-1 cursor-pointer select-none text-white underline"
+                    onClick={createNewRoomId}
+                >
+                    Generate Unique Room Id
+                </button>
+            </div>
+        </>
     )
 }
 

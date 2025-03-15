@@ -65,9 +65,6 @@ export default function Features() {
     )
 }
 
-const Skeleton = () => (
-    <div className="h-32 w-full rounded-lg bg-gray-700"></div>
-)
 
 const items = [
     {
@@ -79,6 +76,7 @@ const items = [
                 src="https://ik.imagekit.io/0oeuxr64bc/Collaborative%20Code%20gif.gif?updatedAt=1740311271013"
                 alt="Feature Image"
                 className="h-auto max-h-[400px] w-auto rounded-lg md:max-h-[350px] lg:max-h-[450px]"
+                loading="lazy"
             />
         ),
         icon: <IconUsers className="h-6 w-6 text-blue-400" />,
@@ -93,10 +91,41 @@ const items = [
                 src="https://ik.imagekit.io/0oeuxr64bc/Collaborative%20Code%20chat%20gif.gif?updatedAt=1740334270853"
                 alt="Real-time Chat Feature"
                 className="h-[75%] max-h-[400px] w-full rounded-lg md:max-h-[350px] lg:max-h-[450px]"
+                loading="lazy"
             />
         ),
         icon: <MessageCircle className="h-6 w-6 text-cyan-400" />,
         classname: "col-span-1 row-span-2 rounded-xl bg-black p-6",
+    },
+    {
+        title: "AI Chatbot",
+        description:
+            "Get instant coding assistance with AI-powered suggestions, debugging, and explanations.",
+        header: (
+            <img
+                src="https://ik.imagekit.io/0oeuxr64bc/Ai%20execution.png?updatedAt=1742050769869"
+                alt="Real-time Chat Feature"
+                className="h-[75%] max-h-[400px] w-full rounded-lg md:max-h-[350px] lg:max-h-[450px]"
+                loading="lazy"
+            />
+        ),
+        icon: <MessageCircle className="h-6 w-6 text-yellow-400" />,
+        classname: "col-span-1 row-span-1 rounded-xl bg-black p-6",
+    },
+    {
+        title: "Drawing Space",
+        description:
+            "Sketch and visualize your ideas in a collaborative whiteboard space.",
+        header: (
+            <img
+                src="https://ik.imagekit.io/0oeuxr64bc/drawing%20files.png?updatedAt=1742052362139"
+                alt="Real-time Chat Feature"
+                className="h-[75%] max-h-[400px] w-full rounded-lg md:max-h-[350px] lg:max-h-[450px]"
+                loading="lazy"
+            />
+        ),
+        icon: <IconBrush className="h-6 w-6 text-pink-400" />,
+        classname: "col-span-1 row-span-1 rounded-xl bg-black p-6",
     },
     {
         title: "File Management",
@@ -108,6 +137,7 @@ const items = [
                     src="https://ik.imagekit.io/0oeuxr64bc/Collaborative%20Code%20Files.png?updatedAt=1740335807516"
                     alt="File Management Feature"
                     className="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
                 />
             </div>
         ),
@@ -124,6 +154,7 @@ const items = [
                     src="https://ik.imagekit.io/0oeuxr64bc/Collaborative%20Code%20Run.gif?updatedAt=1740337729864"
                     alt="Code Execution Feature"
                     className="absolute inset-0 h-full w-full object-contain"
+                    loading="lazy"
                 />
             </div>
         ),
@@ -140,6 +171,7 @@ const items = [
                     src="https://ik.imagekit.io/0oeuxr64bc/Collaborative%20Code%20updates%20gif.gif?updatedAt=1740340442717"
                     alt="Instant Updates Feature"
                     className="absolute inset-0 h-full w-full object-contain"
+                    loading="lazy"
                 />
             </div>
         ),
@@ -156,6 +188,7 @@ const items = [
                     src="https://ik.imagekit.io/0oeuxr64bc/Collaborative%20Code%20Users.gif"
                     alt="User Presence Feature"
                     className="absolute inset-0 h-full w-full object-contain"
+                    loading="lazy"
                 />
             </div>
         ),
@@ -166,11 +199,38 @@ const items = [
         title: "Custom Themes & Fonts",
         description:
             "Your editor, your style! Personalize themes & fonts for the ultimate coding experience.",
-        header: <Skeleton />,
+        header: (
+            <div className="relative h-full w-full overflow-hidden rounded-lg">
+                <img
+                    src="https://ik.imagekit.io/0oeuxr64bc/font%20img.png?updatedAt=1742052041461"
+                    alt="User Presence Feature"
+                    className="absolute inset-0 h-full w-full object-contain"
+                    loading="lazy"
+                />
+            </div>
+        ),
         icon: <IconBrush className="h-6 w-6 text-pink-400" />,
         classname: "col-span-1 row-span-1 rounded-xl bg-black p-6",
     },
+    {
+        title: "Multi-Cursor Editing",
+        description:
+            "Work together like magic! See and edit code with multiple cursors in real-time.",
+        header: (
+            <div className="relative h-full w-full overflow-hidden rounded-lg">
+                <img
+                    src="https://ik.imagekit.io/0oeuxr64bc/Collaborative%20Code%20updates%20gif.gif?updatedAt=1740340442717"
+                    alt="User Presence Feature"
+                    className="absolute inset-0 h-full w-full object-contain"
+                    loading="lazy"
+                />
+            </div>
+        ),
+        icon: <IconUsers className="h-6 w-6 text-orange-400" />,
+        classname: "col-span-1 row-span-1 rounded-xl bg-black p-6",
+    },
 ]
+
 
 
 

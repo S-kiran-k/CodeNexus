@@ -44,6 +44,7 @@ export default function FinalSection() {
 
             {/* Logo in the Top Right Corner */}
             <div className="absolute right-10 top-10">
+                
                 <img
                     src="https://ik.imagekit.io/0oeuxr64bc/Logo-Bg-removed?updatedAt=1741094784685"
                     alt="CodeNexus Logo"

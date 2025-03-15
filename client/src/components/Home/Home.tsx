@@ -4,8 +4,9 @@ import { Link } from "react-router-dom"
 const HomePage: React.FC = () => {
     return (
         <div className="relative isolate overflow-hidden bg-black text-white">
+            {/* Background SVG Pattern (Fixed `pointer-events-none`) */}
             <svg
-                className="absolute inset-0 -z-10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+                className="pointer-events-none absolute inset-0 -z-10 h-full w-full stroke-white/10"
                 aria-hidden="true"
             >
                 <defs>
@@ -23,7 +24,7 @@ const HomePage: React.FC = () => {
                 <svg
                     x="50%"
                     y="-1"
-                    className="overflow-visible fill-gray-800/20"
+                    className="pointer-events-none overflow-visible fill-gray-800/20"
                 >
                     <path
                         d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
@@ -37,8 +38,10 @@ const HomePage: React.FC = () => {
                     fill="url(#dark-pattern)"
                 ></rect>
             </svg>
+
+            {/* Decorative Background Element (Fixed `pointer-events-none`) */}
             <div
-                className="absolute left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
+                className="pointer-events-none absolute left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
                 aria-hidden="true"
             >
                 <div
@@ -49,26 +52,26 @@ const HomePage: React.FC = () => {
                     }}
                 ></div>
             </div>
-            <div className="mt-[-50px] flex h-screen items-center justify-center">
-                <div className="max-w-full flex-shrink-0 px-4 text-center lg:mx-0 lg:max-w-3xl lg:pt-8">
+
+            {/* Main Content (Fixed `select-text` for selection) */}
+            <div className="relative z-10 flex h-screen items-center justify-center">
+                <div className="max-w-full flex-shrink-0 select-text px-4 text-center lg:mx-0 lg:max-w-3xl lg:pt-8">
                     <h1 className="mt-10 text-5xl font-bold tracking-tight text-white sm:text-6xl">
                         revolutionize
-                        <span className="text-gray-400">
-                            {" "}
-                            your workflow
-                        </span>{" "}
+                        <span className="text-gray-400"> your workflow </span>
                         with
                         <span className="text-gray-400"> codeNexus</span>
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-gray-300">
-                        Elevate Your Productivity With codeNexus, Your
-                        Best Parterner In Coding
+                        Elevate Your Productivity With codeNexus, Your Best
+                        Partner In Coding
                     </p>
-                    <div className="mt-5 flex items-center justify-center gap-x-6">
+
+                    {/* Button (Now Fully Clickable) */}
+                    <div className="mt-5 flex justify-center">
                         <Link
-                           to="/form"
-                            className="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-                            rel="noreferrer"
+                            to="/form"
+                            className="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 focus:outline-none"
                         >
                             Check Out →
                         </Link>
