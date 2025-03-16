@@ -69,7 +69,7 @@ function UsersView() {
                     </button>
                     {/* Leave room button */}
                     <button
-                        className="flex flex-grow items-center justify-center rounded-md bg-primary p-3 text-black"
+                        className="flex flex-grow items-center justify-center rounded-md bg-gray-500 p-3 text-black"
                         onClick={leaveRoom}
                         title="Leave room"
                     >

@@ -184,7 +184,10 @@ export const SamePage = () => {
                           "--scale": scale,
                       })}
                   >
-                      <img src="https://ik.imagekit.io/0oeuxr64bc/MainPicFinal.png?updatedAt=1740297446299" className="h-auto w-full" />
+                      <img
+                          src="https://ik.imagekit.io/0oeuxr64bc/MainPicFinal.png?updatedAt=1740297446299"
+                          className="h-auto w-full"
+                      />
                   </motion.div>
               </div>
               <motion.p
@@ -207,7 +210,7 @@ export const SamePage = () => {
                       "--y": paragraph2TranslateY,
                       position,
                   })}
-                  className="translate-y-centered-offset right-[20px] top-1/2 w-[300px] pr-16 text-xl leading-tight text-white"
+                  className="translate-y-centered-offset right-[20px] top-1/2 w-[300px] pr-16 text-2xl leading-tight text-white"
               >
                   Great ideas go beyond code.
                   <br />
@@ -221,7 +224,7 @@ export const SamePage = () => {
                       "--y": paragraph3TranslateY,
                       position,
                   })}
-                  className="translate-y-centered-offset right-[20px] top-1/2 w-[300px] pr-16 text-xl leading-tight text-white"
+                  className="translate-y-centered-offset right-[20px] top-1/2 w-[300px] pr-16 text-2xl leading-tight text-white"
               >
                   Debug faster, build smarter,
                   <br />
@@ -237,12 +240,13 @@ export const SamePage = () => {
                       "--scale": endTextScale,
                       position,
                   })}
-                 
                   className="absolute inset-0 flex items-center justify-center pt-40 text-center"
               >
                   <p className="text-6xl font-extrabold text-white">
                       Let's check out the{" "}
-                      <span className="text-gray-500">amazing features!</span>
+                      <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                          amazing features!
+                      </span>
                   </p>
               </motion.div>
           </div>

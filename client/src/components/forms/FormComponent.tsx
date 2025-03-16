@@ -15,9 +15,9 @@ const FormComponent = () => {
     const { currentUser, setCurrentUser, status, setStatus } = useAppContext()
     const { socket } = useSocket()
     const [isLoading, setIsLoading] = useState(true) // Full page loading state
- const handleLoadingComplete = () => {
-     setIsLoading(false)
- }
+    const handleLoadingComplete = () => {
+        setIsLoading(false)
+    }
     const usernameRef = useRef<HTMLInputElement | null>(null)
     const navigate = useNavigate()
 
@@ -110,8 +110,8 @@ const FormComponent = () => {
     ])
 
     if (isLoading) {
-    return <MainLoading onLoadingComplete={handleLoadingComplete} />   
- }
+        return <MainLoading onLoadingComplete={handleLoadingComplete} />
+    }
 
     return (
         <>
