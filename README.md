@@ -62,7 +62,7 @@ Key features include:
 
 ### 🧾 Prerequisites
 Make sure you have the following installed:
-- **Programming Language:** TypeScript  
+- **Programming Language:** TypeScript | JavaScript 
 - **Package Manager:** npm  
 - **Container Runtime:** Docker  
 
